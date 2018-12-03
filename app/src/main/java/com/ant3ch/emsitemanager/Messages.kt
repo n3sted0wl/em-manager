@@ -19,6 +19,7 @@ class Messages : AppCompatActivity() {
 
         // set up the main recycler view
         recyclerView_messages.layoutManager = LinearLayoutManager(this)
+        fetchMessagesData()
 
         fab_refreshMessages.setOnClickListener{
             fetchMessagesData()

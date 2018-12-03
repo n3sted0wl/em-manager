@@ -21,6 +21,8 @@ class MessagesAdapter(val messageFeed : MessageFeed) : RecyclerView.Adapter<Cust
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val messageToBind = messageFeed.messages.get(position)
         holder?.view?.tv_SenderName?.text = messageToBind.ContactName
+        holder?.view?.tv_MessageContent?.text = messageToBind.Message
+        holder?.view?.tv_ReceivedDate?.text = messageToBind.DateString
     }
 
 }
