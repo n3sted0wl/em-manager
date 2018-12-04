@@ -4,7 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.message_row.view.*
+import okhttp3.*
+import java.io.IOException
 
 class MessagesAdapter(val messageFeed : MessageFeed) : RecyclerView.Adapter<CustomViewHolder>() {
     override fun getItemCount(): Int {
@@ -23,6 +26,51 @@ class MessagesAdapter(val messageFeed : MessageFeed) : RecyclerView.Adapter<Cust
         holder?.view?.tv_SenderName?.text = messageToBind.ContactName
         holder?.view?.tv_MessageContent?.text = messageToBind.Message
         holder?.view?.tv_ReceivedDate?.text = messageToBind.DateString
+        holder?.view?.swt_IsRespondedTo?.isChecked = messageToBind.IsRespondedTo
+
+        // bind events
+        holder?.view?.swt_IsRespondedTo?.setOnCheckedChangeListener{ buttonView, isChecked ->
+            if (isChecked) {
+                markMessageRespondedTo(messageToBind.ID.toString())
+            } else {
+                markMessageNotRespondedTo(messageToBind.ID.toString())
+            }
+        }
+    }
+
+    private fun markMessageRespondedTo(id: String) {
+        println("Attempting to mark a message as responded to through the API")
+        val url = "http://api.elisemauterer.com/ContactMessages/MarkAsResponded/" + id
+        val client = OkHttpClient()
+        var postBody = FormBody.Builder().add("unnecessary", "unnecessary").build()
+        val request = Request.Builder().url(url).method("POST", postBody).build()
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                println("markMessageRespondedTo() succeeded")
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("markMessageRespondedTo() failed")
+            }
+
+        })
+    }
+
+    private fun markMessageNotRespondedTo(id: String) {
+        println("Attempting to mark a message as not responded to through the API")
+        val url = "http://api.elisemauterer.com/ContactMessages/MarkAsNotResponded/" + id
+        val client = OkHttpClient()
+        var postBody = FormBody.Builder().add("unnecessary", "unnecessary").build()
+        val request = Request.Builder().url(url).method("POST", postBody).build()
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                println("markMessageNotRespondedTo() succeeded")
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                println("markMessageNotRespondedTo() failed")
+            }
+        })
     }
 
 }

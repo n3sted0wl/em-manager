@@ -1,11 +1,8 @@
 package com.ant3ch.emsitemanager
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_messages.*
 import okhttp3.*
@@ -27,7 +24,7 @@ class Messages : AppCompatActivity() {
     }
 
     private fun fetchMessagesData() {
-        println("Attempting to consume API")
+        println("Attempting to retrieve message feed from API")
         val url = "http://api.elisemauterer.com/ContactMessages/Feed"
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
